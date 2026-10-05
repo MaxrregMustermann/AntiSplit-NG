@@ -76,5 +76,3 @@ Android runtime.
 - QUERY_ALL_PACKAGES - to list apps installed on the device (see "Selecting from installed apps" in screenshots above)
 - REQUEST_INSTALL_PACKAGES - to show an install button allowing prompt to install an app after merging it
 - Internet permission - to check update for the app (can be disabled in settings)
-
-Feel free to request a build of the app with any of these permissions removed.
