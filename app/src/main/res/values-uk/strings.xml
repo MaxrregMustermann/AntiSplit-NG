@@ -68,7 +68,7 @@
 	<string name="merged">"Об'єднання успішно, виберіть місце для збереження"</string>
 	<string name="mismatch">Наступні splits (%1$s) мають коди версій, що не збігаються. Це лише коди мов, тому програма може працювати і без них, але ці мови в додатку працювати не будуть. Ви все одно хочете продовжити злиття?</string>
     <string name="mismatch_base">" код версії не відповідає коду base.apk"</string>
-    <string name="new_ver">Доступна нова версія AntiSplit M</string>
+    <string name="new_ver">Доступна нова версія AntiSplit NG</string>
     <string name="no_filepath">"Не вдалося знайти шлях до вибраного файлу"</string>
     <string name="no_update_found">Оновлення не знайдено</string>
     <string name="not_apk">: Це не APK файл</string>

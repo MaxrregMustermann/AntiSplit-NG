@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
         sortMode = settings.getInt("sortMode", 0);
         suffix = settings.getString("suffix", "_antisplit");
         outputFolder = settings.getString("outputFolder",
-                fork.MaxrregMustermann.AntiSplitNG.utils.FileUtils.getAntisplitMFolder().getPath());
+                fork.MaxrregMustermann.AntiSplitNG.utils.FileUtils.getOutputFolder().getPath());
 
         View selectFromInstalledApps = findViewById(R.id.fromAppsButton);
         if (aboveSdk20)
@@ -358,7 +358,8 @@ public class MainActivity extends AppCompatActivity {
     private void cleanupAppFolder() {
         if (fork.MaxrregMustermann.AntiSplitNG.utils.FileUtils.doesNotHaveStoragePerm(this))
             return;
-        File appFolder = new File(Environment.getExternalStorageDirectory(), "AntiSplit-M");
+        File appFolder = new File(Environment.getExternalStorageDirectory(),
+                fork.MaxrregMustermann.AntiSplitNG.utils.FileUtils.OUTPUT_FOLDER_NAME);
         if (!appFolder.exists())
             return;
         File[] children = appFolder.listFiles();
@@ -849,7 +850,7 @@ public class MainActivity extends AppCompatActivity {
                         })
                         .setNegativeButton(rss.getString(R.string.create_issue), (dialog, which) -> {
                             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(
-                                    "https://github.com/AbdurazaaqMohammed/AntiSplit-M/issues/new?title=Crash%20Report&body="
+                                    "https://github.com/MaxrregMustermann/AntiSplit-NG/issues/new?title=Crash%20Report&body="
                                             + fullLog)));
                             dialog.dismiss();
                         })

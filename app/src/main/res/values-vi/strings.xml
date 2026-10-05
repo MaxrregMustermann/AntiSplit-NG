@@ -33,7 +33,7 @@
     <string name="merge">Chọn tệp Apks</string>
     <string name="mismatch">Các phần tách sau (%1$s) có mã phiên bản không khớp. Chúng chỉ là mã ngôn ngữ nên ứng dụng có thể chạy mà không cần chúng nhưng những ngôn ngữ này sẽ không hoạt động trong ứng dụng. Bạn có muốn tiếp tục hợp nhất không?</string>
     <string name="mismatch_base">mã phiên bản không khớp với mã của base.apk</string>
-    <string name="new_ver">Đã có phiên bản AntiSplit M mới</string>
+    <string name="new_ver">Đã có phiên bản AntiSplit NG mới</string>
     <string name="no_filepath">Không thể ghi vào filepath</string>
     <string name="no_update_found">Không tìm thấy bản cập nhật</string>
     <string name="not_apk">: Không phải tệp APK</string>

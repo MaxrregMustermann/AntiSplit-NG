@@ -1,4 +1,4 @@
-# AntiSplit M
+# AntiSplit NG
 
 Android app to merge/"AntiSplit" split APKs (APKS/XAPK/APKM) to a regular .APK file
 
@@ -16,8 +16,8 @@ Video - https://youtu.be/Vk566iMG6Gs
 
 There are 3 ways to open a split APK to be merged:
 
-- Share the file and select AntiSplit M in the share menu
-- Press (open) the file and select AntiSplit M in available options
+- Share the file and select AntiSplit NG in the share menu
+- Press (open) the file and select AntiSplit NG in available options
 - Open the app from launcher and press the first button then select the split APK file.
 
 There is also a menu in the app that allows selecting an app from those installed on the device as a split APK. Please try this method if you have problems with selecting a downloaded split APK.

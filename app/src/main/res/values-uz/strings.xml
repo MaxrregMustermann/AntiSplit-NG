@@ -28,7 +28,7 @@
     <string name="merge">Birlashtirish/ajralishga qarshi dastur uchun splits-apk ni tanlang</string>
     <string name="mismatch">Splits-apk (%1$s) qismlari boshqa versiya. Ilova til qismlarisiz ishlaydi va ular ilovada mavjud bo\'lmaydi. Birlashtirishda davom etyapsizmi?</string>
     <string name="mismatch_base">\"versiya base.apk bilan mos kelmaydi\"</string>
-    <string name="new_ver">AntiSplit-M ning yangi versiyasi mavjud!!!</string>
+    <string name="new_ver">AntiSplit NG ning yangi versiyasi mavjud!!!</string>
     <string name="no_filepath">Tanlangan faylga yo\'l topilmadi.</string>
     <string name="no_update_found">Yangilanish topilmadi.</string>
     <string name="not_apk">Bu apk emas.</string>

@@ -68,7 +68,7 @@
     <string name="merged">合并成功，请选择保存位置</string>
     <string name="mismatch">以下拆分（%1$s）的版本代码不匹配。它们只是语言代码，因此应用可以不使用这些代码运行，但这些语言在应用中将无法使用。您是否仍要继续合并？</string>
     <string name="mismatch_base">版本代码与 base.apk 的版本代码不匹配</string>
-    <string name="new_ver">AntiSplit M 新版本现已推出</string>
+    <string name="new_ver">AntiSplit NG 新版本现已推出</string>
     <string name="no_filepath">无法写入文件路径</string>
     <string name="no_update_found">未找到更新</string>
     <string name="not_apk">不是 APK 文件</string>

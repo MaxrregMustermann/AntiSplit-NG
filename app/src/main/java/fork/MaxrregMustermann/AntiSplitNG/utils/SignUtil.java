@@ -59,7 +59,7 @@ public final class SignUtil {
                         .build()))
                 .setInputApk(inputApk)
                 .setOutputApk(output)
-                .setCreatedBy("AntiSplit M")
+                .setCreatedBy("AntiSplit NG")
                 .setV1SigningEnabled(v1)
                 .setV2SigningEnabled(v2)
                 .setV3SigningEnabled(v3)

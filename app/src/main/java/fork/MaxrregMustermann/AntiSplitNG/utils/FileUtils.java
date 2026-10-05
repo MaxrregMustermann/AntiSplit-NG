@@ -17,6 +17,9 @@ import java.nio.file.StandardOpenOption;
 
 public class FileUtils {
 
+    /** Folder on shared storage that merged APKs are written to. */
+    public static final String OUTPUT_FOLDER_NAME = "AntiSplit NG";
+
     public static File copyFileFromAssetsAndGetFile(String fileName, Context context) throws IOException {
         File destinationFile = new File(context.getFilesDir(), fileName);
         if (!destinationFile.exists())
@@ -123,9 +126,15 @@ public class FileUtils {
                 : !Environment.isExternalStorageManager());
     }
 
-    public static File getAntisplitMFolder() {
-        final File antisplitMFolder = new File(Environment.getExternalStorageDirectory(), "AntiSplit-M");
-        return antisplitMFolder.exists() || antisplitMFolder.mkdir() ? antisplitMFolder
+    /**
+     * The folder merged APKs are written to on shared storage.
+     *
+     * <p>Named after the app so the output is recognisable, and shared with {@code MainActivity}'s
+     * cleanup of leftover empty files.
+     */
+    public static File getOutputFolder() {
+        File folder = new File(Environment.getExternalStorageDirectory(), OUTPUT_FOLDER_NAME);
+        return folder.exists() || folder.mkdir() ? folder
                 : new File(Environment.getExternalStorageDirectory(), "Download");
     }
 }

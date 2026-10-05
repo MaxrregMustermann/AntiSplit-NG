@@ -151,13 +151,35 @@ public class TranslationsTest {
 
     @Test
     public void theAppNameIsNotTranslated() {
-        // "AntiSplit M" is a brand name, so a translation of it is a Crowdin mistake to drop.
+        // The app name is a brand name, so a translation of it is a Crowdin mistake to drop.
         assertTrue("app_name must be marked untranslatable",
                 read(DEFAULT_STRINGS).contains(
                         "<string name=\"app_name\" translatable=\"false\""));
         for (File file : translationFiles()) {
             assertFalse(file + " translates app_name, which is a brand name",
                     read(file).contains("name=\"app_name\""));
+        }
+    }
+
+    @Test
+    public void theAppNameMatchesTheProject() {
+        // The launcher label comes from app_name, so a rename that misses it leaves the app
+        // installed under the previous name.
+        assertEquals("app_name must match the project name",
+                "AntiSplit NG", stringValues(read(DEFAULT_STRINGS)).get("app_name"));
+    }
+
+    @Test
+    public void noStringStillMentionsThePreviousAppName() {
+        // new_ver is translated, so a rename has to reach every locale or users of that language
+        // are told about a release of an app they do not have.
+        for (File file : translationFiles()) {
+            for (Map.Entry<String, String> entry : stringValues(read(file)).entrySet()) {
+                assertFalse(file + " still mentions the old name in \"" + entry.getKey() + "\": "
+                                + entry.getValue(),
+                        entry.getValue().contains("AntiSplit M")
+                                || entry.getValue().contains("AntiSplit-M"));
+            }
         }
     }
 

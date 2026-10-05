@@ -82,7 +82,7 @@ public class UpdateUtil {
                         if (!toast && !TextUtils.isEmpty(context.lastVerChecked) && context.lastVerChecked.equals(latestVersion))
                             return;
                         String ending = ".apk";
-                        String filename = "AntiSplit-M.v" + latestVersion + ending;
+                        String filename = "AntiSplit-NG.v" + latestVersion + ending;
                         String link = dl.endsWith(ending) ? dl : dl + File.separator + filename;
                         MaterialTextView changelogText = new MaterialTextView(context);
                         String linebreak = "<br />";
@@ -125,7 +125,7 @@ public class UpdateUtil {
                                     })
                                     .setNegativeButton("Go to GitHub Release", (dialog, which) -> context
                                             .startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(
-                                                    "https://github.com/AbdurazaaqMohammed/AntiSplit-M/releases/latest"))))
+                                                    "https://github.com/MaxrregMustermann/AntiSplit-NG/releases/latest"))))
                                     .setNeutralButton(rss.getString(R.string.cancel), null).create();
                             alertDialog.setOnDismissListener(dialog -> context.lastVerChecked = finalLatestVersion);
                             context.runOnUiThread(alertDialog::show);
@@ -147,7 +147,7 @@ public class UpdateUtil {
     @NonNull
     private static HttpURLConnection getHttpURLConnection() throws IOException {
         HttpURLConnection conn = (HttpURLConnection) new URL(
-                "https://api.github.com/repos/AbdurazaaqMohammed/AntiSplit-M/releases").openConnection();
+                "https://api.github.com/repos/MaxrregMustermann/AntiSplit-NG/releases").openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("User-Agent",
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0");
