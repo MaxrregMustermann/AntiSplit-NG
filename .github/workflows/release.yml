@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Tag to release, for example v2.3.2'
+        description: 'Tag to release, for example v0.1.0'
         required: true
 
 permissions:
@@ -27,27 +27,79 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
 
+      # The keystore arrives as base64 in an encrypted secret and never touches the repository.
+      # Nothing here prints it, and it is destroyed again in the cleanup step below.
       - name: Restore signing keystore
         env:
           KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         run: |
-          if [ -z "$KEYSTORE_B64" ]; then
-            echo "::error::KEYSTORE_B64 secret is not set"
-            exit 1
-          fi
-          echo "$KEYSTORE_B64" | base64 -d > app/keystore.jks
+          set -euo pipefail
+          for name in KEYSTORE_B64 KEYSTORE_PASSWORD KEY_ALIAS; do
+            if [ -z "${!name:-}" ]; then
+              echo "::error::Secret $name is not set. See docs/releasing.md."
+              exit 1
+            fi
+          done
+          # The store password doubles as the key password for a PKCS12 keystore created by
+          # keytool without -keypass, so the workflow never needs a fourth secret.
+          printf '%s' "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/release.p12"
+          chmod 600 "$RUNNER_TEMP/release.p12"
 
       - name: Build signed release APK
         env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEYSTORE_ENTRY_ALIAS: ${{ secrets.KEYSTORE_ENTRY_ALIAS }}
-          KEYSTORE_ENTRY_PASSWORD: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
+          SIGNING_KEYSTORE: ${{ runner.temp }}/release.p12
+          SIGNING_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          SIGNING_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: ./gradlew :app:assembleRelease --stacktrace
+
+      - name: Check the APK is signed with the expected certificate
+        env:
+          SIGNER_SHA256: ${{ secrets.SIGNER_SHA256 }}
+        run: |
+          set -euo pipefail
+          apk=app/build/outputs/apk/release/app-release.apk
+          if [ ! -f "$apk" ]; then
+            echo "::error::Expected a signed APK at $apk but it is missing."
+            exit 1
+          fi
+          actual="$(apksigner verify --print-certs "$apk" \
+            | sed -n 's/.*certificate SHA-256 digest: //p' | head -1)"
+          if [ -z "$actual" ]; then
+            echo "::error::The APK is not signed."
+            exit 1
+          fi
+          if [ -n "${SIGNER_SHA256:-}" ] && [ "$actual" != "$SIGNER_SHA256" ]; then
+            echo "::error::Signed by the wrong certificate."
+            echo "  expected $SIGNER_SHA256"
+            echo "  actual   $actual"
+            exit 1
+          fi
+          echo "Signed by $actual"
+
+      # Checksum is computed after signing, so it covers the exact bytes being published.
+      - name: Generate checksum
+        run: |
+          set -euo pipefail
+          cd app/build/outputs/apk/release
+          sha256sum app-release.apk > app-release.apk.sha256
+          cat app-release.apk.sha256
+
+      - name: Verify checksum
+        run: cd app/build/outputs/apk/release && sha256sum --check app-release.apk.sha256
 
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ inputs.tag }}
-          files: app/build/outputs/apk/release/*.apk
+          files: |
+            app/build/outputs/apk/release/app-release.apk
+            app/build/outputs/apk/release/app-release.apk.sha256
           fail_on_unmatched_files: true
           generate_release_notes: true
+
+      - name: Destroy the keystore
+        if: always()
+        run: shred -u "$RUNNER_TEMP/release.p12" 2>/dev/null || rm -f "$RUNNER_TEMP/release.p12"

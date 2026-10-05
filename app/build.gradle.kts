@@ -2,9 +2,26 @@ plugins {
     id("com.android.application")
 }
 
+// Signing a release is opt-in. Without SIGNING_KEYSTORE pointing at a keystore the release build
+// is intentionally left unsigned rather than quietly falling back to the debug key, which would
+// produce an APK that looks like a release but is signed with the wrong identity. See
+// docs/releasing.md for how to produce a signed release.
+val signingKeystore = providers.environmentVariable("SIGNING_KEYSTORE").orNull
+
 android {
     namespace = "fork.MaxrregMustermann.AntiSplitNG"
     compileSdk = 36
+
+    signingConfigs {
+        if (signingKeystore != null) {
+            create("release") {
+                storeFile = file(signingKeystore)
+                storePassword = providers.environmentVariable("SIGNING_STORE_PASSWORD").orNull
+                keyAlias = providers.environmentVariable("SIGNING_KEY_ALIAS").orNull
+                keyPassword = providers.environmentVariable("SIGNING_KEY_PASSWORD").orNull
+            }
+        }
+    }
 
     defaultConfig {
         applicationId = "fork.MaxrregMustermann.AntiSplitNG"
@@ -16,18 +33,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    signingConfigs {
-        create("release") {
-            val keystoreFile = file("keystore.jks")
-            if (keystoreFile.exists()) {
-                storeFile = keystoreFile
-                storePassword = System.getenv("KEYSTORE_PASSWORD")
-                keyAlias = System.getenv("KEYSTORE_ENTRY_ALIAS")
-                keyPassword = System.getenv("KEYSTORE_ENTRY_PASSWORD")
-            }
-        }
-    }
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -36,13 +41,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            // Without a keystore the release build still has to work, so it falls back to the
-            // debug key rather than failing. CI supplies a real keystore.
-            signingConfig = if (file("keystore.jks").exists()) {
-                signingConfigs.getByName("release")
-            } else {
-                signingConfigs.getByName("debug")
-            }
+            signingConfig = signingConfigs.findByName("release")
         }
     }
 
