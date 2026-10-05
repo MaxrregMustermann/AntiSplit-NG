@@ -30,6 +30,12 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v4
 
+      - name: Install build-tools
+        run: sdkmanager "build-tools;35.0.0"
+
+      - name: Add build-tools to PATH
+        run: echo "$ANDROID_HOME/build-tools/35.0.0" >> "$GITHUB_PATH"
+
       # The keystore arrives as base64 in an encrypted secret and never touches the repository.
       # Nothing here prints it, and it is destroyed again in the cleanup step below.
       - name: Restore signing keystore
