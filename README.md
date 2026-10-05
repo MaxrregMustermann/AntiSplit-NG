@@ -8,7 +8,7 @@ Some other apps that can perform this task like Apktool M, AntiSplit G2, NP Mana
 
 ### Note
 
-All features of this app with better speed and other functions have been implemented in my new app <a href="https://github.com/AbdurazaaqMohammed/MP-Manager">MP Manager</a>
+
 
 ## Usage
 
