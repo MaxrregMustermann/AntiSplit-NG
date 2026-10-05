@@ -119,23 +119,6 @@
                 android:maxLines="3"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/dropdown_compress_level"
-            style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/select_compression_level">
-
-            <AutoCompleteTextView
-                android:id="@+id/auto_complete_tv2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none"
-                android:singleLine="false"
-                android:lines="2"
-                android:maxLines="11"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

@@ -29,7 +29,7 @@
     <string name="searching">Vyhľadávanie súborov APK…</string>
     <string name="cancel">Zrušiť</string>
     <string name="select">Vybrať</string>
-    <string name="lang" translatable="false">Language</string>
+    <string name="lang">Language</string>
     <string name="update">Dostupná aktualizácia</string>
     <string name="new_ver">Dostupná nová verzia AntiSplit M</string>
     <string name="dl">Stiahnuť</string>
@@ -61,5 +61,4 @@
     <string name="merged">Zlúčenie úspešné, vyberte kam uložiť APK</string>
     <string name="save">Uložiť</string>
     <string name="check_file_valid">"Skontrolujte, či je vybraný súbor platný ZIP alebo rozdelená APK (skúste ho otvoriť v správcovi súborov alebo ho nainštalovať). Ak je už nainštalovaný a chyba pretrváva, skúste funkciu "</string>
-    <string name="default_c">Predvolená hodnota</string>
 </resources>

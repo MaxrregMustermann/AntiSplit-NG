@@ -28,7 +28,7 @@
     <string name="searching">Mencari berkas APK…</string>
     <string name="cancel">Batalkan</string>
     <string name="select">Pilih</string>
-    <string name="lang" translatable="false">Language</string>
+    <string name="lang">Language</string>
     <string name="update">Pembaruan tersedia</string>
     <string name="new_ver">Versi baru AntiSplit M telah tersedia</string>
     <string name="dl">Unduh</string>
@@ -57,5 +57,7 @@
     <string name="file_save_method">Metode penyimpanan berkas</string>
     <string name="pick_folder">Masukkan folder</string>
     <string name="not_split">Ini sepertinya bukan APK terpisah (%1$s)</string>
-    <string name="default_c">nilai bawaan baku</string>
+    <string name="merged">Merged successfully, select where to save</string>
+    <string name="save">save</string>
+    <string name="check_file_valid">"Please check that file selected is a valid ZIP/split APK (Try opening in file manager or installing it). If you have it installed but still getting error please try the feature "</string> 
 </resources>

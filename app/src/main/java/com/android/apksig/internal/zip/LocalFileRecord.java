@@ -16,7 +16,6 @@
 
 package com.android.apksig.internal.zip;
 
-import com.aefyr.pseudoapksigner.Constants;
 import com.android.apksig.internal.util.ByteBufferSink;
 import com.android.apksig.util.DataSink;
 import com.android.apksig.util.DataSource;
@@ -25,6 +24,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
@@ -335,7 +335,7 @@ public class LocalFileRecord {
             long crc32,
             long uncompressedSize,
             DataSink output) throws IOException {
-        byte[] nameBytes = name.getBytes(Constants.UTF8);
+        byte[] nameBytes = name.getBytes(StandardCharsets.UTF_8);
         int recordSize = HEADER_SIZE_BYTES + nameBytes.length;
         ByteBuffer result = ByteBuffer.allocate(recordSize);
         result.order(ByteOrder.LITTLE_ENDIAN);

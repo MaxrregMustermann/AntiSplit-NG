@@ -28,7 +28,7 @@
     <string name="searching">Apk fájlok keresése…</string>
     <string name="cancel">Mégse</string>
     <string name="select">Kiválasztás</string>
-    <string name="lang" translatable="false">Nyelv</string>
+    <string name="lang">Nyelv</string>
     <string name="update">Frissítés érhető el</string>
     <string name="new_ver">Új AntiSplit M verzió érhető el</string>
     <string name="dl">Letöltés</string>
@@ -57,5 +57,7 @@
     <string name="file_save_method">Fájl mentési módszer</string>
     <string name="pick_folder">Mappa megadása</string>
     <string name="not_split">Ez nem tűnik split APK-nak (%1$s)</string>
-    <string name="default_c">alapértelmezés</string>
+    <string name="merged">Merged successfully, select where to save</string>
+    <string name="save">save</string>
+    <string name="check_file_valid">"Please check that file selected is a valid ZIP/split APK (Try opening in file manager or installing it). If you have it installed but still getting error please try the feature "</string> 
 </resources>

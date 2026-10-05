@@ -30,7 +30,7 @@
     <string name="searching">Ricerca file apk…</string>
     <string name="cancel">Annulla</string>
     <string name="select">Seleziona</string>
-    <string name="lang" translatable="false">Lingua</string>
+    <string name="lang">Lingua</string>
     <string name="update">Aggiornamento disponibile</string>
     <string name="new_ver">È disponibile una nuova versione di AntiSplit M</string>
     <string name="dl">Scarica</string>
@@ -58,5 +58,7 @@
     <string name="force">Forza unificazione delle suddivisioni non corrispondenti (con differente versionCode o nome pacchetto)</string>
     <string name="file_save_method">Opzioni di salvataggio file</string>
     <string name="pick_folder">Inserisci percorso</string>
-    <string name="default_c">valore di default</string>
+    <string name="merged">Merged successfully, select where to save</string>
+    <string name="save">save</string>
+    <string name="check_file_valid">"Please check that file selected is a valid ZIP/split APK (Try opening in file manager or installing it). If you have it installed but still getting error please try the feature "</string> 
 </resources>

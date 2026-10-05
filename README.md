@@ -38,7 +38,34 @@ Note: An APK must be signed in order to install it (unless you use tool like [Co
 
 ⭐ [APKEditor](https://github.com/REAndroid/APKEditor) by REAndroid, what makes it all possible
 
+- [ARSCLib](https://github.com/MorpheApp/ARSCLib), the resource and archive library APKEditor merges with
 - [Android port](https://github.com/MuntashirAkon/apksig-android) of apksig library by MuntashirAkon to sign APKs
+
+## Building
+
+Requires JDK 21 and an Android SDK with API 36 installed.
+
+```bash
+./gradlew assembleDebug
+```
+
+`ARSCLib` is pulled from JitPack, so the first build downloads it. To work on `ARSCLib` itself, clone it
+next to this repository as `../ARSCLib` and the local checkout replaces the published artifact.
+
+```bash
+git clone https://github.com/MorpheApp/ARSCLib.git ../ARSCLib
+./gradlew assembleDebug
+```
+
+### Tests
+
+```bash
+./gradlew test
+```
+
+The tests build real split APKs with `ARSCLib`, merge them and verify the results, including that the
+merged APK's signature verifies. They need network access the first time, to download the Robolectric
+Android runtime.
 
 ## Permissions
 

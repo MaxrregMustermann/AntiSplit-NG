@@ -6,8 +6,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 
-import org.apache.commons.io.FilenameUtils;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -28,16 +26,32 @@ public class FileUtils {
         return destinationFile;
     }
 
+    /**
+     * The same file with a {@code _1}, {@code _2}, ... suffix added, so a merge never silently
+     * overwrites an earlier one.
+     */
     public static File getUnusedFile(File file) {
         int i = 0;
         while (file.exists()) {
             i++;
             String fileName = file.getName();
-            String extension = FilenameUtils.getExtension(fileName);
+            String extension = extensionOf(fileName);
             file = new File(file.getParentFile(),
                     fileName.replace('.' + extension, "").replaceFirst("_\\d+$", "") + '_' + i + '.' + extension);
         }
         return file;
+    }
+
+    /**
+     * The text after the last dot, or an empty string when there is none.
+     *
+     * <p>A dot in a folder name is not an extension, and a leading dot marks a hidden file rather
+     * than an extension.
+     */
+    static String extensionOf(String fileName) {
+        int dot = fileName.lastIndexOf('.');
+        int separator = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
+        return dot > separator + 1 ? fileName.substring(dot + 1) : "";
     }
 
     public static File getUnusedFile(String file) {

@@ -18,6 +18,7 @@ package com.android.apksig.util;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
+import android.annotation.SuppressLint;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Phaser;
@@ -31,6 +32,9 @@ public interface RunnablesExecutor {
         private final int QUEUE_SIZE = 4;
 
         @Override
+        // java.util.concurrent.Phaser ships in desugar_jdk_libs_minimal, so this is safe
+        // below API 24 even though lint cannot see the desugaring.
+        @SuppressLint("NewApi")
         public void execute(RunnablesProvider provider) {
             final ExecutorService mExecutor =
                     new ThreadPoolExecutor(PARALLELISM, PARALLELISM,

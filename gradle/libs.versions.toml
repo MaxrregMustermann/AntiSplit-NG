@@ -1,0 +1,40 @@
+[versions]
+# The bundled debug keystore is BKS, which the JVM only understands with BouncyCastle registered.
+# Android ships that provider, so this is needed for tests only.
+bouncycastle = "1.86"
+# Versions are the newest that still declare minSdk 19. AndroidX raised its floor to 21 in 2024;
+# bumping these requires raising minSdk in app/build.gradle.kts first.
+activity = "1.9.3"
+android-gradle-plugin = "9.4.1"
+appcompat = "1.6.1"
+core = "1.13.1"
+# MorpheApp fork of REAndroid/ARSCLib, pinned to a commit because the project has no releases.
+# It carries the archive-writer and resource-table fixes the merger depends on. Switch back to
+# com.github.REAndroid:ARSCLib once those land upstream.
+arsclib = "88d5e0811f"
+desugar-jdk-libs = "2.1.5"
+junit = "4.13.2"
+material = "1.12.0"
+robolectric = "4.17"
+# Robolectric downloads its Android runtime on first use; pinning it keeps local and CI runs on the
+# same image instead of resolving "latest".
+robolectric-android = "16-robolectric-13921718-i7"
+test-core = "1.6.1"
+
+[libraries]
+activity = { module = "androidx.activity:activity", version.ref = "activity" }
+androidx-core = { module = "androidx.core:core", version.ref = "core" }
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+arsclib = { module = "com.github.MorpheApp:ARSCLib", version.ref = "arsclib" }
+# ARSCLib is a plain Java library compiled against java.util.function, which Android only gained in
+# API 24. The minimal desugaring spec is the smallest one that covers it, which matters here
+# because the app ships without R8.
+desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs_minimal", version.ref = "desugar-jdk-libs" }
+bouncycastle = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
+junit = { module = "junit:junit", version.ref = "junit" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+test-core = { module = "androidx.test:core", version.ref = "test-core" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

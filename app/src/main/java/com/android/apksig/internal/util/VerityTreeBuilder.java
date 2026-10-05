@@ -23,6 +23,7 @@ import com.android.apksig.util.DataSink;
 import com.android.apksig.util.DataSource;
 import com.android.apksig.util.DataSources;
 
+import android.annotation.SuppressLint;
 import java.io.Closeable;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -219,6 +220,9 @@ public class VerityTreeBuilder implements Closeable {
      * less than the chunk size and padding is desired, feed with extra padding 0 to fill up the
      * chunk before digesting.
      */
+    // java.util.concurrent.Phaser ships in desugar_jdk_libs_minimal, so this is safe below API 24
+    // even though lint cannot see the desugaring.
+    @SuppressLint("NewApi")
     private void digestDataByChunks(DataSource dataSource, DataSink dataSink) throws IOException {
         final long size = dataSource.size();
         final int chunks = (int) divideRoundup(size, CHUNK_SIZE);

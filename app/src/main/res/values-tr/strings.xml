@@ -28,7 +28,7 @@
     <string name="searching">APK dosyaları aranıyor…</string>
     <string name="cancel">İptal</string>
     <string name="select">Seç</string>
-    <string name="lang" translatable="false">Dil</string>
+    <string name="lang">Dil</string>
     <string name="update">Güncelleme mevcut</string>
     <string name="new_ver">AntiSplit M\'nin yeni bir sürümü mevcut</string>
     <string name="dl">İndir</string>
@@ -57,5 +57,7 @@
     <string name="file_save_method">Dosya kaydetme seçenekleri</string>
     <string name="pick_folder">Yolu girin</string>
     <string name="not_split">Bu bölünmüş APK gibi durmuyor (%1$s)</string>
-    <string name="default_c">Varsayılan değer</string>
+    <string name="merged">Merged successfully, select where to save</string>
+    <string name="save">save</string>
+    <string name="check_file_valid">"Please check that file selected is a valid ZIP/split APK (Try opening in file manager or installing it). If you have it installed but still getting error please try the feature "</string> 
 </resources>

@@ -11,7 +11,8 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
-import com.abdurazaaqmohammed.AntiSplit.main.MainActivity;
+import android.content.ContentResolver;
+import android.provider.OpenableColumns;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class FileUtils {
     https://github.com/starry-shivam/FileUtils/blob/main/file-utils/src/main/java/com/starry/file_utils/FileUtils.kt
      */
 
-    public static OutputStream getOutputStream(Uri uri, MainActivity context) throws IOException {
+    public static OutputStream getOutputStream(Uri uri, Context context) throws IOException {
         String uriPath;
         if(doesNotHaveStoragePerm(context) || (uriPath = uri.getPath()) == null || uriPath.startsWith("/document/msf:")) return context.getContentResolver().openOutputStream(uri);
         try {
@@ -58,7 +59,7 @@ public class FileUtils {
         }
     }
 
-    public static InputStream getInputStream(Uri uri, MainActivity context) throws IOException {
+    public static InputStream getInputStream(Uri uri, Context context) throws IOException {
         if(doesNotHaveStoragePerm(context)) return context.getContentResolver().openInputStream(uri);
         String filePath = getPath(uri, context);
         File file = filePath == null ? null : new File(filePath);
@@ -130,7 +131,7 @@ public class FileUtils {
     }
 
     @SuppressLint("NewApi")
-    public static String getPath(Uri uri, MainActivity context) throws IOException {
+    public static String getPath(Uri uri, Context context) throws IOException {
         String selection;
         String[] selectionArgs;
 
@@ -222,12 +223,12 @@ public class FileUtils {
         return copyFileToInternalStorageAndGetPath(uri, context);
     }
 
-    public static String copyFileToInternalStorageAndGetPath(Uri uri, MainActivity context) throws IOException {
+    public static String copyFileToInternalStorageAndGetPath(Uri uri, Context context) throws IOException {
         return copyFileToInternalStorage(uri, context).getPath();
     }
 
-    public static File copyFileToInternalStorage(Uri uri, MainActivity context) throws IOException {
-        File output = new File(context.getCacheDir(), context.getOriginalFileName(uri));
+    public static File copyFileToInternalStorage(Uri uri, Context context) throws IOException {
+        File output = new File(context.getCacheDir(), getDisplayName(context, uri));
         if(output.exists() && output.length() > 999) return output;
         try (OutputStream outputStream = com.abdurazaaqmohammed.utils.FileUtils.getOutputStream(output); InputStream cursor = context.getContentResolver().openInputStream(uri)) {
             int read;
@@ -237,6 +238,33 @@ public class FileUtils {
             }
         }
         return output;
+    }
+
+    /**
+     * The file name behind {@code uri}: what the provider reports, else the last path segment,
+     * else a timestamp so there is always something usable as a name.
+     */
+    public static String getDisplayName(Context context, Uri uri) {
+        String name = null;
+        ContentResolver contentResolver = context.getContentResolver();
+        if (contentResolver != null && "content".equals(uri.getScheme())) {
+            try (Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    name = cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME));
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        if (TextUtils.isEmpty(name)) {
+            name = uri.getPath();
+            if (!TextUtils.isEmpty(name)) {
+                int cut = name.lastIndexOf('/');
+                if (cut != -1) {
+                    name = name.substring(cut + 1);
+                }
+            }
+        }
+        return TextUtils.isEmpty(name) ? "file_" + System.currentTimeMillis() : name;
     }
 
     private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {

@@ -18,7 +18,7 @@
 package com.android.apksig.internal.util;
 
 
-import com.aefyr.pseudoapksigner.Base64;
+import android.util.Base64;
 import com.android.apksig.internal.asn1.Asn1BerParser;
 import com.android.apksig.internal.asn1.Asn1DecodingException;
 import com.android.apksig.internal.asn1.Asn1DerEncoder;

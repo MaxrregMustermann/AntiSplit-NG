@@ -10,7 +10,6 @@ import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -29,7 +28,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.OpenableColumns;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -66,6 +64,7 @@ import com.abdurazaaqmohammed.utils.DeviceSpecsUtil;
 import com.abdurazaaqmohammed.utils.InstallUtil;
 import com.abdurazaaqmohammed.utils.LanguageUtil;
 import com.abdurazaaqmohammed.utils.LegacyUtils;
+import com.abdurazaaqmohammed.utils.OutputNames;
 import com.abdurazaaqmohammed.utils.RunUtil;
 import com.abdurazaaqmohammed.utils.UpdateUtil;
 import com.google.android.material.button.MaterialButton;
@@ -75,7 +74,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
-import com.reandroid.Merger;
+import com.abdurazaaqmohammed.AntiSplit.merge.Merger;
 import com.reandroid.apk.ApkBundle;
 import com.reandroid.utils.io.FileUtil;
 import com.starry.FileUtils;
@@ -91,13 +90,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.zip.Deflater;
 
 import com.github.paul035.LocaleHelper;
 
 /** @noinspection deprecation */
 public class MainActivity extends AppCompatActivity {
-    private int compressionLevel;
     private int saveMode = 0;
     private String outputFolder;
     private boolean showDialog;
@@ -179,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (theme == R.style.Theme_MyApp_Black)
             findViewById(R.id.main).setBackgroundColor(Color.BLACK);
-        deviceSpecsUtil = new DeviceSpecsUtil(this);
+        deviceSpecsUtil = new DeviceSpecsUtil(this, logger);
 
         TextView logField = findViewById(R.id.logField);
         NestedScrollView scrollView = findViewById(R.id.scrollView);
@@ -212,7 +209,6 @@ public class MainActivity extends AppCompatActivity {
         saveMode = settings.getInt("saveMode", 0);
         systemTheme = settings.getBoolean("systemTheme", true);
         sortMode = settings.getInt("sortMode", 0);
-        compressionLevel = settings.getInt("compressionLevel", Deflater.DEFAULT_COMPRESSION);
         suffix = settings.getString("suffix", "_antisplit");
         outputFolder = settings.getString("outputFolder",
                 com.abdurazaaqmohammed.utils.FileUtils.getAntisplitMFolder().getPath());
@@ -349,7 +345,6 @@ public class MainActivity extends AppCompatActivity {
                 .putBoolean("selectSplitsForDevice", selectSplitsForDevice)
                 .putInt("theme", theme)
                 .putInt("sortMode", sortMode)
-                .putInt("compressionLevel", compressionLevel)
                 .putBoolean("checkForUpdates", checkForUpdates)
                 .putString("lang", lang)
                 .putString("lastVerChecked", lastVerChecked)
@@ -383,6 +378,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        deviceSpecsUtil.closeContainer();
         FileUtil.deleteDirectory(getCacheDir());
         cleanupAppFolder();
         super.onDestroy();
@@ -401,13 +397,13 @@ public class MainActivity extends AppCompatActivity {
         if (selectedFromInstalledApps)
             urisAreSplitApks = false;
 
-        Merger merger = new Merger(cacheDir, this, compressionLevel);
+        Merger merger = new Merger(cacheDir, this, deviceSpecsUtil);
 
         new RunUtil(handler, context, null).runInBackground(() -> {
             criticalErrorOccurred = false; // reset to make sure success message shows
             try {
                 if (selectedFromInstalledApps) {
-                    try (ApkBundle bundle = new ApkBundle(compressionLevel)) {
+                    try (ApkBundle bundle = new ApkBundle()) {
                         // Selected from apps list
                         PackageManager packageManager = context.getPackageManager();
                         bundle.loadApkDirectory(
@@ -430,7 +426,7 @@ public class MainActivity extends AppCompatActivity {
                         merged = merger.run(splitAPKUri, splitsToNotInclude, signApk, force);
                         selectDirToSaveAPKOrSaveNow();
                     } else
-                        try (ApkBundle bundle = new ApkBundle(compressionLevel)) {
+                        try (ApkBundle bundle = new ApkBundle()) {
                             ArrayList<Uri> uriArrayList = uris;
                             for (int i = 0; i < uriArrayList.size(); i++) {
                                 Uri uri = uriArrayList.get(i);
@@ -726,7 +722,8 @@ public class MainActivity extends AppCompatActivity {
                                 splitsUnselectedInDialog = splits;
                                 process();
                             }
-                        }).setNegativeButton("Cancel", null);
+                        }).setNegativeButton(rss.getString(R.string.cancel),
+                        (dialog, which) -> deviceSpecsUtil.closeContainer());
                 getHandler().post(() -> {
                     toggleAnimation(false);
                     AlertDialog alertDialog = builder.create();
@@ -878,40 +875,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /** The name the merged APK should be saved under, derived from the file that was opened. */
     public String getOriginalFileName(Uri uri) {
-        String result = null;
-
-        String scheme = uri.getScheme();
-        if (!TextUtils.isEmpty(scheme) && "content".equals(scheme)) {
-            ContentResolver contentResolver = getContentResolver();
-            if (contentResolver != null)
-                try (Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
-                    if (cursor != null && cursor.moveToFirst()) {
-                        result = cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME));
-                    }
-                }
-        }
-
-        if (TextUtils.isEmpty(result)) {
-            result = uri.getPath();
-            if (!TextUtils.isEmpty(result)) {
-                int cut = result.lastIndexOf('/');
-                if (cut != -1) {
-                    result = result.substring(cut + 1);
-                }
-            }
-        }
-
-        logger.logMessage(openedFile = result);
-
-        if (TextUtils.isEmpty(result)) {
-            result = "file_" + System.currentTimeMillis();
-        }
-        try {
-            return result.replaceFirst("\\.(?:zip|xapk|aspk|apk[sm])$", suffix + ".apk");
-        } catch (Exception e) {
-            return result + suffix + ".apk";
-        }
+        String name = FileUtils.getDisplayName(this, uri);
+        logger.logMessage(openedFile = name);
+        return OutputNames.merged(name, suffix);
     }
 
     private void selectDirToSaveAPKOrSaveNow() {
@@ -961,7 +929,7 @@ public class MainActivity extends AppCompatActivity {
                                     || fp.contains("/Android/data")) {
                                 f = new File(outputFolder, getOriginalFileName(splitAPKUri));
                             } else
-                                f = new File(fp.replaceFirst("\\.(?:zip|xapk|aspk|apk[sm])", suffix + ".apk"));
+                                f = new File(OutputNames.mergedInPath(fp, suffix));
                         } catch (Exception e) {
                             f = new File(outputFolder, getOriginalFileName(splitAPKUri));
                         }
@@ -1023,8 +991,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
         }
-        return (TextUtils.isEmpty(realName) ? "unknown" + suffix + ".apk"
-                : realName.replaceFirst("\\.apk$", suffix + ".apk"));
+        return TextUtils.isEmpty(realName) ? OutputNames.unknown(suffix)
+                : OutputNames.mergedFromApk(realName, suffix);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -1066,7 +1034,7 @@ public class MainActivity extends AppCompatActivity {
         View dialogView = layoutInflater.inflate(R.layout.dialog_search, null);
 
         ListView listView = dialogView.findViewById(R.id.list_view);
-        final AppListArrayAdapter adapter = new AppListArrayAdapter(MainActivity.this, appInfoList, true);
+        final AppListArrayAdapter adapter = new AppListArrayAdapter(MainActivity.this, rss, appInfoList, true);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
@@ -1121,7 +1089,7 @@ public class MainActivity extends AppCompatActivity {
                         return Long.compare(field2, field1);
                     });
                 }
-                listView.setAdapter(new AppListArrayAdapter(MainActivity.this, appInfoList, true));
+                listView.setAdapter(new AppListArrayAdapter(MainActivity.this, rss, appInfoList, true));
                 return true;
             });
 
@@ -1341,27 +1309,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        TextInputLayout dropdownLayout2 = settingsDialog.findViewById(R.id.dropdown_compress_level);
-        AutoCompleteTextView autoCompleteTextView2 = settingsDialog.findViewById(R.id.auto_complete_tv2);
-
-        String[] items2 = {rss.getString(R.string.default_c), "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
-        dropdownLayout2.setHint(rss.getString(R.string.select_compression_level));
-
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, R.layout.dropdownitem, items2) {
-            @NonNull
-            @Override
-            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                if (convertView == null)
-                    convertView = LayoutInflater.from(MainActivity.this).inflate(R.layout.dropdownitem, parent, false);
-                TextView view = (TextView) convertView;
-                view.setTextColor(theme == R.style.Theme_MyApp_Light ? Color.BLACK : Color.WHITE);
-                view.setText(items2[position]);
-                return convertView;
-            }
-        };
-        autoCompleteTextView2.setText(items2[compressionLevel + 1]);
-        autoCompleteTextView2.setAdapter(adapter2);
-        autoCompleteTextView2.setThreshold(1);
-        autoCompleteTextView2.setOnItemClickListener((parent, view, position, id) -> compressionLevel = position - 1);
     }
 }

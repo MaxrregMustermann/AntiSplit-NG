@@ -1,0 +1,65 @@
+name: Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      # Robolectric needs Java 21 to run the Android 16 image, and AGP 9 needs 17 or newer.
+      - name: Setup Java
+        uses: actions/setup-java@v6
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Cache Gradle
+        uses: burrunan/gradle-cache-action@v3
+
+      - name: Cache Android SDK
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches/modules-2
+            ~/.gradle/caches/transforms-*
+          key: gradle-${{ runner.os }}-${{ hashFiles('gradle/libs.versions.toml') }}
+          restore-keys: gradle-${{ runner.os }}-
+
+      - name: Run unit tests
+        env:
+          # Robolectric downloads its Android runtime on first use and does not retry well, so the
+          # download is cached explicitly rather than left to run on every job.
+          GRADLE_OPTS: "-Dorg.gradle.caching=true"
+        run: ./gradlew :app:testDebugUnitTest --stacktrace
+
+      - name: Run lint
+        run: ./gradlew :app:lint --stacktrace
+
+      - name: Build debug APK
+        run: ./gradlew :app:assembleDebug --stacktrace
+
+      - name: Build release APK
+        run: ./gradlew :app:assembleRelease --stacktrace
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: antisplit-m
+          path: app/build/outputs/apk/*/*.apk
+          if-no-files-found: error

@@ -28,7 +28,7 @@
     <string name="searching">APK 파일 검색 중…</string>
     <string name="cancel">취소</string>
     <string name="select">선택</string>
-    <string name="lang" translatable="false">언어</string>
+    <string name="lang">언어</string>
     <string name="update">업데이트 있음</string>
     <string name="new_ver">AntiSplit M의 새 버전이 있습니다</string>
     <string name="dl">다운로드</string>
@@ -60,6 +60,4 @@
     <string name="merged">병합했습니다. 저장할 위치를 선택하세요</string>
     <string name="save">저장</string>
     <string name="check_file_valid">"선택한 파일이 올바른 ZIP/분할 APK인지 확인하세요(파일 관리자에서 열거나 설치해 보세요). 이미 설치되어 있는데도 오류가 계속되면 다음 기능을 사용해 보세요: "</string> <!-- select_from_installed_apps -->
-    <string name="select_compression_level">압축 수준 선택</string><!-- lower = faster, higher = smaller file -->
-    <string name="default_c">기본값</string>
 </resources>

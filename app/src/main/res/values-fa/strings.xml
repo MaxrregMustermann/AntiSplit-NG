@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">AntiSplit M</string>
     <string name="merge">انتخاب فایل APK تقسیم‌شده برای ادغام (APKS;APKM;XAPK)</string>
     <string name="success_saved">فایل با موفقیت ذخیره شد</string>
     <string name="enable_logs">فعال‌سازی گزارش‌ها</string>
@@ -30,7 +29,7 @@
     <string name="searching">در حال جستجوی فایل‌های APK…</string>
     <string name="cancel">لغو</string>
     <string name="select">انتخاب</string>
-    <string name="lang" translatable="false">Language</string>
+    <string name="lang">Language</string>
     <string name="update">به‌روزرسانی موجود است</string>
     <string name="new_ver">نسخه جدید AntiSplit M موجود است</string>
     <string name="dl">دانلود</string>
@@ -62,6 +61,4 @@
     <string name="merged">با موفقیت ادغام شد، محل ذخیره را انتخاب کنید</string>
     <string name="save">ذخیره</string>
     <string name="check_file_valid">"لطفاً بررسی کنید که فایل انتخاب‌شده یک ZIP/APK تقسیم‌شده معتبر است (سعی کنید آن را در مدیر فایل باز کنید یا نصب کنید). اگر نصب شده اما همچنان خطا می‌گیرید، لطفاً از این قابلیت استفاده کنید "</string>
-    <string name="select_compression_level">انتخاب سطح فشرده‌سازی</string>
-    <string name="default_c">پیش‌فرض</string>
 </resources>

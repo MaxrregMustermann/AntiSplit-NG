@@ -17,7 +17,7 @@
 
 package com.android.apksig.internal.apk.v1;
 
-import com.aefyr.pseudoapksigner.Base64;
+import android.util.Base64;
 
 import static com.android.apksig.internal.oid.OidConstants.getSigAlgSupportedApiLevels;
 import static com.android.apksig.internal.pkcs7.AlgorithmIdentifier.getJcaDigestAlgorithm;

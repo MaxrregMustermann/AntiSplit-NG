@@ -1,5 +1,7 @@
 package com.abdurazaaqmohammed.AntiSplit.main;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +15,21 @@ import com.abdurazaaqmohammed.AntiSplit.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class AppListArrayAdapter extends ArrayAdapter<AppInfo> implements Filterable {
-    private final MainActivity context;
+    private final Context context;
+    private final Resources resources;
     private final List<AppInfo> originalAppInfoList;
     public List<AppInfo> filteredAppInfoList;
     private final boolean showIcon;
     private AppInfoFilter filter;
 
-    public AppListArrayAdapter(MainActivity context, List<AppInfo> appInfoList, boolean showIcon) {
+    public AppListArrayAdapter(Context context, Resources resources,
+            List<AppInfo> appInfoList, boolean showIcon) {
         super(context, R.layout.list_item, appInfoList);
         this.context = context;
+        this.resources = resources;
         this.originalAppInfoList = new ArrayList<>(appInfoList);
         this.filteredAppInfoList = new ArrayList<>(appInfoList);
         this.showIcon = showIcon;
@@ -54,7 +60,7 @@ public class AppListArrayAdapter extends ArrayAdapter<AppInfo> implements Filter
         if (showIcon) {
             iconView.setImageDrawable(appInfo.icon);
             iconView.setVisibility(View.VISIBLE);
-            iconView.setContentDescription(context.getRss().getString(R.string.app_icon_list_label));
+            iconView.setContentDescription(resources.getString(R.string.app_icon_list_label));
         } else iconView.setVisibility(View.GONE);
 
         return convertView;
@@ -77,9 +83,13 @@ public class AppListArrayAdapter extends ArrayAdapter<AppInfo> implements Filter
                 results.count = originalAppInfoList.size();
             } else {
                 List<AppInfo> filteredItems = new ArrayList<>();
-                String filterPattern = constraint.toString().toLowerCase().trim();
+                // Locale.ROOT, not the default locale: with a Turkish device the default locale
+                // lowercases "I" to a dotless one and "Instagram" stops matching "instagram".
+                String filterPattern = constraint.toString().toLowerCase(Locale.ROOT).trim();
                 for (AppInfo appInfo : originalAppInfoList) {
-                    if (appInfo.name.toLowerCase().contains(filterPattern) || appInfo.packageName.toLowerCase().contains(filterPattern)) {
+                    if (appInfo.name.toLowerCase(Locale.ROOT).contains(filterPattern)
+                            || appInfo.packageName.toLowerCase(Locale.ROOT)
+                                    .contains(filterPattern)) {
                         filteredItems.add(appInfo);
                     }
                 }
