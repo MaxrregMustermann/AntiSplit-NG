@@ -3,15 +3,15 @@ plugins {
 }
 
 android {
-    namespace = "com.abdurazaaqmohammed.AntiSplit"
+    namespace = "fork.MaxrregMustermann.AntiSplitNG"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.abdurazaaqmohammed.AntiSplit"
+        applicationId = "fork.MaxrregMustermann.AntiSplitNG"
         minSdk = 19
         targetSdk = 36
-        versionCode = 60
-        versionName = "2.3.2"
+        versionCode = 1
+        versionName = "0.1.0"
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

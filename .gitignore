@@ -1,6 +1,11 @@
 # Gradle
 .gradle/
 build/
+
+# Libraries are declared in gradle/libs.versions.toml, so a jar checked into the source tree
+# would silently shadow or conflict with the declared dependency.
+*.jar
+*.aar
 !gradle/wrapper/gradle-wrapper.jar
 
 # Android Studio / IntelliJ

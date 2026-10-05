@@ -1,6 +1,6 @@
 package com.starry;
 
-import static com.abdurazaaqmohammed.utils.FileUtils.doesNotHaveStoragePerm;
+import static fork.MaxrregMustermann.AntiSplitNG.utils.FileUtils.doesNotHaveStoragePerm;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -53,7 +53,7 @@ public class FileUtils {
         try {
             String filePath = getPath(uri, context);
             File file = filePath == null ? null : new File(filePath);
-            return file != null && file.canWrite() ? com.abdurazaaqmohammed.utils.FileUtils.getOutputStream(file) : context.getContentResolver().openOutputStream(uri);
+            return file != null && file.canWrite() ? fork.MaxrregMustermann.AntiSplitNG.utils.FileUtils.getOutputStream(file) : context.getContentResolver().openOutputStream(uri);
         } catch (Exception e) {
             return context.getContentResolver().openOutputStream(uri);
         }
@@ -63,7 +63,7 @@ public class FileUtils {
         if(doesNotHaveStoragePerm(context)) return context.getContentResolver().openInputStream(uri);
         String filePath = getPath(uri, context);
         File file = filePath == null ? null : new File(filePath);
-        return file != null && file.canRead() ? com.abdurazaaqmohammed.utils.FileUtils.getInputStream(file) : context.getContentResolver().openInputStream(uri);
+        return file != null && file.canRead() ? fork.MaxrregMustermann.AntiSplitNG.utils.FileUtils.getInputStream(file) : context.getContentResolver().openInputStream(uri);
     }
 
     private static boolean fileExists(String filePath) {
@@ -230,7 +230,7 @@ public class FileUtils {
     public static File copyFileToInternalStorage(Uri uri, Context context) throws IOException {
         File output = new File(context.getCacheDir(), getDisplayName(context, uri));
         if(output.exists() && output.length() > 999) return output;
-        try (OutputStream outputStream = com.abdurazaaqmohammed.utils.FileUtils.getOutputStream(output); InputStream cursor = context.getContentResolver().openInputStream(uri)) {
+        try (OutputStream outputStream = fork.MaxrregMustermann.AntiSplitNG.utils.FileUtils.getOutputStream(output); InputStream cursor = context.getContentResolver().openInputStream(uri)) {
             int read;
             byte[] buffers = new byte[1024];
             while ((read = cursor.read(buffers)) != -1) {

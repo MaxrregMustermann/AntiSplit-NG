@@ -49,6 +49,9 @@ Requires JDK 21 and an Android SDK with API 36 installed.
 ./gradlew assembleDebug
 ```
 
+Every library and plugin version lives in [`gradle/libs.versions.toml`](gradle/libs.versions.toml);
+no jar is checked into the source tree.
+
 `ARSCLib` is pulled from JitPack, so the first build downloads it. To work on `ARSCLib` itself, clone it
 next to this repository as `../ARSCLib` and the local checkout replaces the published artifact.
 

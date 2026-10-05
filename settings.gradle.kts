@@ -24,7 +24,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "AntiSplit-M"
+rootProject.name = "AntiSplit-NG"
 include(":app")
 
 // ARSCLib as a checked-out sibling directory replaces the JitPack artifact, so a local

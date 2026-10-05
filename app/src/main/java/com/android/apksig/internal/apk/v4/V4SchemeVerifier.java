@@ -18,7 +18,7 @@ package com.android.apksig.internal.apk.v4;
 
 import static com.android.apksig.internal.apk.ApkSigningBlockUtils.toHex;
 
-import com.abdurazaaqmohammed.utils.FileUtils;
+import fork.MaxrregMustermann.AntiSplitNG.utils.FileUtils;
 import com.android.apksig.ApkVerifier;
 import com.android.apksig.ApkVerifier.Issue;
 import com.android.apksig.internal.apk.ApkSigningBlockUtils;
