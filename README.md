@@ -4,7 +4,7 @@ Android app to merge/"AntiSplit" split APKs (APKS/XAPK/APKM) to a regular .APK f
 
 This project is a simple GUI implementation of Merge utilities from [REAndroid APKEditor](https://github.com/REAndroid/APKEditor).
 
-Some other apps that can perform this task like Apktool M, AntiSplit G2, NP Manager are all closed source. In addition, some older apps have a large problem in not removing the information about splits in the APK from the AndroidManifest.xml. If a merged/non-split APK contains this information it will cause an "App not installed" error on some devices. Fortunately the implementation by REAndroid fixes this issue.
+Some other apps that can perform this task like Apktool M, AntiSplit G2, NP Manager are all closed source. In addition, some older apps have a large problem in not removing the information about splits in the APK from the AndroidManifest.xml. If a merged/non-split APK contains this information it will cause an "App not installed" error on some devices. Fortunately the implementation by REAndroid fixes this issue. On top of that, AntiSplit M doesn't benefit from [MorpheApp's ARSCLib fork](https://github.com/MorpheApp/ARSCLib) performance improvements (faster merge, less memory usage) which are not yet merged [upstream](https://github.com/REAndroid/ARSCLib).
 
 ### Note
 
