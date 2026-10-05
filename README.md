@@ -1,4 +1,4 @@
-# AntiSplit NG
+# AntiSplit Next-Generation
 
 Android app to merge/"AntiSplit" split APKs (APKS/XAPK/APKM) to a regular .APK file
 
