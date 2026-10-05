@@ -13,7 +13,7 @@ bouncycastle = "1.86"
 # MorpheApp fork of REAndroid/ARSCLib, pinned to a commit because the project has no releases.
 # It carries the archive-writer and resource-table fixes the merger depends on. Switch back to
 # com.github.REAndroid:ARSCLib once those land upstream.
-arsclib = "88d5e0811f"
+arsclib = "9b742c412d"
 # ARSCLib is a plain Java library compiled against java.util.function, which Android only gained in
 # API 24. The minimal desugaring spec is the smallest one covering it, which matters here because
 # the app ships without R8.
