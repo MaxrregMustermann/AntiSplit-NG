@@ -28,7 +28,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v5
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v2
 
       # The keystore arrives as base64 in an encrypted secret and never touches the repository.
       # Nothing here prints it, and it is destroyed again in the cleanup step below.
