@@ -27,7 +27,7 @@ androidx-core = { module = "androidx.core:core", version.ref = "core" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 arsclib = { module = "com.github.MorpheApp:ARSCLib", version.ref = "arsclib" }
 bouncycastle = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
-desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs_minimal", version.ref = "desugar-jdk-libs" }
+desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar-jdk-libs" }
 junit = { module = "junit:junit", version.ref = "junit" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }

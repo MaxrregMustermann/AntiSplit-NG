@@ -1,0 +1,4 @@
+- v0.1.1
+Fix support for Android API Level 19-23 (Android 4.4-6)
+- v0.1.0
+Initial Release
