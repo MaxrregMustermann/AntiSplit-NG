@@ -8,7 +8,7 @@ Some other apps that can perform this task like Apktool M, AntiSplit G2, NP Mana
 
 ### Note
 
-
+Huge thanks to AntiSplit M and it's contributors for the amazing prior work! 
 
 ## Usage
 
