@@ -2,7 +2,7 @@
 # Newest versions that still declare minSdk 19. AndroidX raised its floor to 21 in 2024, so bumping
 # these requires raising minSdk in app/build.gradle.kts first.
 activity = "1.9.3"
-android-gradle-plugin = "9.5.0"
+android-gradle-plugin = "9.4.1"
 appcompat = "1.6.1"
 core = "1.13.1"
 # The bundled debug keystore is BKS, which the JVM only understands with BouncyCastle registered.
